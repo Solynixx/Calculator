@@ -14,7 +14,9 @@ def prompt():
         choice = int(input("Enter Choice : "))
         return choice
     except  ValueError :
-        print("invalid input must be whole number or decimal !!")
+        print("Invalid choice! Please enter a number between 1 and 5.")
+        print()
+        return None
 
     
 def get_number():
@@ -42,25 +44,23 @@ def divide(x,y):
         result = x / y
     except ZeroDivisionError :
         print("cannot be divided by 0")
+        print()
         return None, None
     op = "÷"
-    return op, result
+    return result, op
         
 def calculator(x,y,choice):
-    if choice <= 4 :
-            if choice == 1 :
-                return add(x,y)
-            elif choice == 2 :
-                return subtract(x,y)
-            elif choice == 3 :
-                return multiply(x,y)
-            elif choice == 4 :
-                return divide(x,y)
+    if 1 <= choice <= 4 :
+        if choice == 1 :
+            return add(x,y)
+        elif choice == 2 :
+            return subtract(x,y)
+        elif choice == 3 :
+            return multiply(x,y)
+        elif choice == 4 :
+            return divide(x,y)
     else :
-        print("Your choice is invalid !!") 
-        print("Please print valid number !! ") 
-        print()
-        print("-"*25)
+        return None, None
 
 def print_result(x,y,result,op):
         if x.is_integer() and y.is_integer():
@@ -71,7 +71,6 @@ def print_result(x,y,result,op):
             print(f"{x:.2f} {op} {y:.0f} = {result:.2f}")
         else :
             print(f"{x:.2f} {op} {y:.2f} = {result:.2f}")
-        print("-"*25)
         print()
 
 while True :
@@ -80,7 +79,19 @@ while True :
     if  option == 5 :
         print("Thanks for using my Calculator !")
         break
+    elif option is None :
+        continue
+    elif option < 1 or option > 5 :
+        print("Your choice is invalid !!") 
+        print("Please print valid number !! ") 
+        print()
+        continue
     x, y = get_number()
-    result = calculator(x,y,option)
-    op = calculator(x,y,option)
+    result,op = calculator(x,y,option)
+    if result is None :
+        continue
+    if op == "÷" and x.is_integer() and y.is_integer():
+        print(f"{x:.0f} {op} {y:.0f} = {result:.2f}")
+        print()
+        continue
     print_result(x,y,result,op)
