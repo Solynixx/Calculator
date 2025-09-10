@@ -18,7 +18,6 @@ def prompt():
         print()
         return None
 
-    
 def get_number():
     x = float(input("Enter first number  : "))
     y = float(input("Enter second number : "))
@@ -62,16 +61,26 @@ def calculator(x,y,choice):
     else :
         return None, None
 
-def print_result(x,y,result,op):
+def print_result(x, y, result, op):
+    if op == "÷":
+        if x.is_integer() and y.is_integer():
+            print(f"{x:.0f} {op} {y:.0f} = {result:.2f}")
+        elif x.is_integer() and not y.is_integer():
+            print(f"{x:.0f} {op} {y:.2f} = {result:.2f}")
+        elif y.is_integer() and not x.is_integer():
+            print(f"{x:.2f} {op} {y:.0f} = {result:.2f}")
+        else:
+            print(f"{x:.2f} {op} {y:.2f} = {result:.2f}")
+    else:
         if x.is_integer() and y.is_integer():
             print(f"{x:.0f} {op} {y:.0f} = {result:.0f}")
         elif x.is_integer() and not y.is_integer():
             print(f"{x:.0f} {op} {y:.2f} = {result:.2f}")
         elif y.is_integer() and not x.is_integer():
             print(f"{x:.2f} {op} {y:.0f} = {result:.2f}")
-        else :
+        else:
             print(f"{x:.2f} {op} {y:.2f} = {result:.2f}")
-        print()
+    print()
 
 while True :
     menu()
@@ -85,14 +94,9 @@ while True :
         print("Your choice is invalid !!") 
         print("Please print valid number !! ") 
         print()
-        continue
+        continue    
     x, y = get_number()
     result,op = calculator(x,y,option)
     if result is None :
         continue
-    if op == "÷" and x.is_integer() and y.is_integer():
-        print(f"{x:.0f} {op} {y:.0f} = {result:.2f}")
-        print()
-        continue
     print_result(x,y,result,op)
-
