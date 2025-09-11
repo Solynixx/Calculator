@@ -1,4 +1,5 @@
 class Calculator:
+    history = []
     def __init__(self):
         self.x = 0
         self.y = 0
@@ -11,7 +12,10 @@ class Calculator:
         print("2. Subtract")
         print("3. Multiply")
         print("4. Divide")
-        print("5. Exit")
+        print("5. Show history")
+        print("6. Clear history")
+        print("7. Save history")
+        print("8. Exit")
         print("-"*25)  
 
     def prompt():
@@ -19,7 +23,8 @@ class Calculator:
             choice = int(input("Enter Choice : "))
             return choice
         except  ValueError :
-            print("Invalid choice! Please enter a number between 1 and 5.")
+            print("Your choice is invalid !! ")
+            print("Please input in numbers !!")
             print()
             return None
 
@@ -52,9 +57,18 @@ class Calculator:
             return None, None
         op = "÷"
         return result, op
+    
+    def show_history():
+        if  len(Calculator.history) == 0 :
+            print("No have history yet")
+            print()
+        else :
+            for no, item in enumerate(Calculator.history, start= 1) :
+                print(f"{no}. {item}")
+            print()
             
     def calculator(self,choice):
-        if 1 <= choice <= 4 :
+        if 1 <= choice <= 5 :
             if choice == 1 :
                 return self.add()
             elif choice == 2 :
@@ -63,41 +77,45 @@ class Calculator:
                 return self.multiply()
             elif choice == 4 :
                 return self.divide()
+            elif choice == 5:
+                Calculator.show_history()
         else :
             return None, None
 
-    def print_result(x, y, result, op):
+    def format_result(x, y, result, op):
         if op == "÷":
             if x.is_integer() and y.is_integer():
-                print(f"{x:.0f} {op} {y:.0f} = {result:.2f}")
+                return f"{x:.0f} {op} {y:.0f} = {result:.2f}"
             elif x.is_integer() and not y.is_integer():
-                print(f"{x:.0f} {op} {y:.2f} = {result:.2f}")
+                return f"{x:.0f} {op} {y:.2f} = {result:.2f}"
             elif y.is_integer() and not x.is_integer():
-                print(f"{x:.2f} {op} {y:.0f} = {result:.2f}")
+                return f"{x:.2f} {op} {y:.0f} = {result:.2f}"
             else:
-                print(f"{x:.2f} {op} {y:.2f} = {result:.2f}")
+                return f"{x:.2f} {op} {y:.2f} = {result:.2f}"
         else:
             if x.is_integer() and y.is_integer():
-                print(f"{x:.0f} {op} {y:.0f} = {result:.0f}")
+                return f"{x:.0f} {op} {y:.0f} = {result:.0f}"
             elif x.is_integer() and not y.is_integer():
-                print(f"{x:.0f} {op} {y:.2f} = {result:.2f}")
+                return f"{x:.0f} {op} {y:.2f} = {result:.2f}"
             elif y.is_integer() and not x.is_integer():
-                print(f"{x:.2f} {op} {y:.0f} = {result:.2f}")
+                return f"{x:.2f} {op} {y:.0f} = {result:.2f}"
             else:
-                print(f"{x:.2f} {op} {y:.2f} = {result:.2f}")
-        print()
+                return f"{x:.2f} {op} {y:.2f} = {result:.2f}"
+        print()    
 
 while True :
     Calculator.menu() 
     option = Calculator.prompt()
-    if  option == 5 :
+    if  option == 6 :
         print("Thanks for using my Calculator !")
         break
+    elif option == 5 :
+        Calculator.show_history()
+        continue
     elif option is None :
         continue
-    elif option < 1 or option > 5 :
-        print("Your choice is invalid !!") 
-        print("Please print valid number !! ") 
+    elif option < 1 or option > 7 :
+        print("Invlaid Choice! Please enter a number between 1 and 5. ") 
         print()
         continue
     number = Calculator()
@@ -105,4 +123,7 @@ while True :
     result,op = number.calculator(option)
     if result is None :
         continue
-    Calculator.print_result(x,y,result,op)
+    print(Calculator.format_result(x,y,result,op))
+    print()
+    Calculator.history.append(Calculator.format_result(x,y,result,op))
+# Coming soon for number 6  and 7
