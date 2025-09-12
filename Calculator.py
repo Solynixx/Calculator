@@ -63,12 +63,21 @@ class Calculator:
             print("No have history yet")
             print()
         else :
-            for no, item in enumerate(Calculator.history, start= 1) :
-                print(f"{no}. {item}")
+            for number, item in enumerate(Calculator.history, start= 1) :
+                print(f"{number}. {item}")
             print()
-            
+
+    def clear_history():
+        Calculator.history.clear()
+        print("History cleared !")
+
+    def save_history():
+        all_history = "\n".join(Calculator.history)
+        with open("save_history_calculator.txt","w",encoding="utf-8") as file :
+            file.write(all_history + "\n")
+
     def calculator(self,choice):
-        if 1 <= choice <= 5 :
+        if 1 <= choice <= 4 :
             if choice == 1 :
                 return self.add()
             elif choice == 2 :
@@ -77,8 +86,6 @@ class Calculator:
                 return self.multiply()
             elif choice == 4 :
                 return self.divide()
-            elif choice == 5:
-                Calculator.show_history()
         else :
             return None, None
 
@@ -101,21 +108,29 @@ class Calculator:
                 return f"{x:.2f} {op} {y:.0f} = {result:.2f}"
             else:
                 return f"{x:.2f} {op} {y:.2f} = {result:.2f}"
-        print()    
 
 while True :
     Calculator.menu() 
     option = Calculator.prompt()
-    if  option == 6 :
+    if  option == 8 :
         print("Thanks for using my Calculator !")
         break
     elif option == 5 :
         Calculator.show_history()
         continue
+    elif option == 6 :
+        Calculator.clear_history()
+        print()
+        continue
+    elif option == 7 :
+        Calculator.save_history()
+        print("your history has been saved")
+        print()
+        continue
     elif option is None :
         continue
     elif option < 1 or option > 7 :
-        print("Invlaid Choice! Please enter a number between 1 and 5. ") 
+        print("Invalid Choice! Please enter a number between 1 and 8. ") 
         print()
         continue
     number = Calculator()
@@ -126,4 +141,3 @@ while True :
     print(Calculator.format_result(x,y,result,op))
     print()
     Calculator.history.append(Calculator.format_result(x,y,result,op))
-# Coming soon for number 6  and 7
