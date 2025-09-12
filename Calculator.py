@@ -1,3 +1,4 @@
+from datetime import datetime
 class Calculator:
     history = []
     def __init__(self):
@@ -29,8 +30,22 @@ class Calculator:
             return None
 
     def get_number(self):
-        self.x = float(input("Enter first number  : "))
-        self.y = float(input("Enter second number : "))
+        while True :
+            try : 
+                self.x = float(input("Enter first number  : "))
+                break
+            except ValueError :
+                print("Invalid! Please input number only")
+                print()
+                continue
+        while True :
+            try : 
+                self.y = float(input("Enter second number : "))
+                break
+            except ValueError :
+                print("Invalid! Please input number only")
+                print()
+                continue
         return self.x, self.y
     
     def add(self):
@@ -59,12 +74,14 @@ class Calculator:
         return result, op
     
     def show_history():
+        date = datetime.now()
+        spesific_date = date.strftime("%Y-%m-%d %I:%M %p")
         if  len(Calculator.history) == 0 :
             print("No have history yet")
             print()
         else :
             for number, item in enumerate(Calculator.history, start= 1) :
-                print(f"{number}. {item}")
+                print(f"[{spesific_date}] {number}. {item}")
             print()
 
     def clear_history():
