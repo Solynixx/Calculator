@@ -74,13 +74,12 @@ class Calculator:
         return result, op
     
     def show_history():
-
         if  len(Calculator.history) == 0 :
             print("No have history yet")
             print()
         else :
-            for number, item in enumerate(Calculator.history, start= 1) :
-                print(f"{number}. {item}")
+            for number, (spesific_date, output) in enumerate(Calculator.history, start= 1) :
+                print(f"{spesific_date} {number}. {output}")
             print()
 
     def clear_history():
@@ -156,5 +155,5 @@ while True :
         continue
     output = Calculator.format_result(x,y,result,op)
     print(f"{output}\n")
-    date = datetime.now().strftime("%Y-%m-%d %I:%M%p")
-    Calculator.history.append(f"{date} {output}")
+    spesific_date = datetime.now().strftime("[%Y-%m-%d] [%I:%M %p]")
+    Calculator.history.append((spesific_date, output))
