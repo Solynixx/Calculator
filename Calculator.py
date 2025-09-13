@@ -87,9 +87,9 @@ class Calculator:
         print("History cleared !")
 
     def save_history():
-        all_history = "\n".join(Calculator.history)
         with open("save_history_calculator.txt","w",encoding="utf-8") as file :
-            file.write(all_history + "\n")
+            for number, (spesific_date, output) in enumerate (Calculator.history, start = 1 ):
+                file.write(f"{spesific_date} {number}. {output}"+"\n")
 
     def calculator(self,choice):
         if 1 <= choice <= 4 :
@@ -139,7 +139,7 @@ while True :
         continue
     elif option == 7 :
         Calculator.save_history()
-        print("your history has been saved")
+        print("Your history has been saved")
         print()
         continue
     elif option is None :
