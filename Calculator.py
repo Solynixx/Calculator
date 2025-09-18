@@ -86,6 +86,11 @@ class Calculator:
         Calculator.history.clear()
         print("History cleared !")
 
+    def auto_save_on_exit():
+        if len(Calculator.history) > 0 :
+            Calculator.save_history()
+            print("History auto-saved")
+
     def save_history():
         with open("save_history_calculator.txt","w",encoding="utf-8") as file :
             for number, (spesific_date, output) in enumerate (Calculator.history, start = 1 ):
@@ -123,11 +128,12 @@ class Calculator:
                 return f"{x:.2f} {op} {y:.0f} = {result:.2f}"
             else:
                 return f"{x:.2f} {op} {y:.2f} = {result:.2f}"
-
+            
 while True :
     Calculator.menu() 
     option = Calculator.prompt()
     if  option == 8 :
+        Calculator.auto_save_on_exit()
         print("Thanks for using my Calculator !")
         break
     elif option == 5 :
