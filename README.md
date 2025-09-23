@@ -88,6 +88,6 @@ Enter second number : 5
 * Add **auto-save history on exit**.
 * Create a **GUI version** using Tkinter/PyQt.
 * Add **unit testing** for better reliability.
-.
+
 ---
 
