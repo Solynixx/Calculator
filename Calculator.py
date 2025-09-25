@@ -193,18 +193,7 @@ class Calculator:
             return None, None
 
     def format_result(x, y, result, op):
-        """
-        Format the calculation result with proper decimal precision.
-
-        Args:
-            x (float): first number
-            y (float): second number
-            result (float): calculation result
-            op (str): operator symbol
-
-        Returns:
-            str: formatted result string
-        """
+        
         if op == "÷":
             if x.is_integer() and y.is_integer():
                 return f"{x:.0f} {op} {y:.0f} = {result:.2f}"
