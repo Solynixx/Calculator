@@ -56,6 +56,8 @@ while True:
 
             continue # Continue allowing user to perform more operations before returning
 
+
+
     elif start_choice == 2 :
         # calculator_scientific.menu_scientific()
         # coming soon for calculator scientific
@@ -81,6 +83,16 @@ while True:
         # coming soon
         pass
 
+    # =====================================
+    # 🚪 EXIT PROGRAM
+    # =====================================
     elif start_choice == 7:
         print("THANK YOU FOR USING MY PROGRAM")
         break
+
+    # =====================================
+    # ⚠️ INVALID MENU CHOICE
+    # =====================================
+    else:
+        print("This feature is not implemented yet or invalid.\n")
+        continue
