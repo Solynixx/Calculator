@@ -71,17 +71,18 @@ class Calculator:
         Perform division on all provided numbers.
         Handles division by zero with exception control.
         """
-    def divide(self,*numbers):
-        try:
-            result = numbers[0]
-            for num in numbers [1:] :
-                result /= num
-        except ZeroDivisionError :
-            print("cannot be divided by 0")
-            print()
-            return None, None
-        op = " ÷ "
-        return result, op
+    def divide(self, *numbers):
+        while True:
+            try:
+                result = numbers[0]
+                for num in numbers[1:]:
+                    result /= num
+                op = " ÷ "
+                return result, op
+            except ZeroDivisionError:
+                print("cannot be divided by 0")
+                print()
+                numbers = self.get_number_normal()
 
     # ===============================
     # 🧭 USER PROMPT HANDLING
@@ -142,43 +143,49 @@ class Calculator:
         Returns:
             tuple: (result, operator) if valid, otherwise (None, None).
     """
-    def calculator_normal(self,choice, numbers):
-        while True :
-            if 1 <= choice <= 4 and numbers is not None :
-                if choice == 1 :
-                    return self.add(*numbers)
-                elif choice == 2 :
-                    return self.subtract(*numbers)
-                elif choice == 3 :
-                    return self.multiply(*numbers)
-                elif choice == 4 :
-                    result, op = self.divide(*numbers)
-                    if result is None :
-                        print("Please re-enter valid numbers (cannot divide by 0).")
-                        continue
-                    return result,op
-            else :
-                return None, None
+    def calculator_normal(self, choice, numbers):
+        if 1 <= choice <= 4 and numbers is not None:
+            if choice == 1:
+                return self.add(*numbers)
+            elif choice == 2:
+                return self.subtract(*numbers)
+            elif choice == 3:
+                return self.multiply(*numbers)
+            elif choice == 4:
+                return self.divide(*numbers)
+        else:
+            return None, None
 
     # ===============================
     # 🧾 RESULT FORMATTING
     # ===============================
-    """
-        Format the calculation output with a timestamp for display or saving.
-
-        Args:
-            numbers (list): The list of numbers used in the operation.
-            result (float): The result of the operation.
-            op (str): The operation symbol used.
-            order (int, optional): Optional index/order for history display.
-
-        Returns:
-            str: A formatted string showing the timestamp, operation, and result.
-    """
     def format_result(self, numbers,result, op, order=None):
+        """
+        Format the calculation result with timestamp and operation details.
+        Integers are displayed without decimal points.
+        """
         specific_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        format_result_operation = op.join(map(str, numbers))
+
+        # Convert all numbers: show integers without decimals, 
+        # and round floats to 2 digits if needed
+        formatted_number = []
+        for format in numbers :
+            if format.is_integer():
+                formatted_number.append(str(int(format))) # Convert to int and then string
+            else :
+                formatted_number.append(f"{format:.2f}") # Round float to 2 decimal places
+                
+        # Format the result the same way
+        if result.is_integer():
+            result_display = str(int(result))
+        else :
+            result_display = f"{result:.2f}"
+        
+        # Join all formatted numbers with the operation symbol (e.g., "3 + 2")
+        format_result_operation = op.join(formatted_number)
+
+        # Return formatted string with optional order number
         if order is not None:
-            return f"|{specific_date}| {order}. {format_result_operation} = {result}\n"
+            return f"|{specific_date}| {order}. {format_result_operation} = {result_display}\n"
         else:
-            return f"|{specific_date}| {format_result_operation} = {result}\n"
+            return f"|{specific_date}| {format_result_operation} = {result_display}\n"
