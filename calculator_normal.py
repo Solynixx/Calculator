@@ -72,17 +72,17 @@ class Calculator:
         Handles division by zero with exception control.
         """
     def divide(self, *numbers):
-        while True:
-            try:
-                result = numbers[0]
-                for num in numbers[1:]:
-                    result /= num
-                op = " ÷ "
-                return result, op
-            except ZeroDivisionError:
-                print("cannot be divided by 0")
-                print()
-                numbers = self.get_number_normal()
+        try:
+            result = numbers[0]
+            for num in numbers[1:]:
+                result /= num
+            op = " ÷ "
+            return result, op
+        except ZeroDivisionError:
+            print("cannot be divided by 0")
+            print()
+            return None, None
+        
 
     # ===============================
     # 🧭 USER PROMPT HANDLING
@@ -158,13 +158,16 @@ class Calculator:
 
     # ===============================
     # 🧾 RESULT FORMATTING
-    # ===============================
+    # =============================== anomali
     def format_result(self, numbers,result, op, order=None):
         """
         Format the calculation result with timestamp and operation details.
         Integers are displayed without decimal points.
         """
         specific_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        if result is None:
+            return ""
 
         # Convert all numbers: show integers without decimals, 
         # and round floats to 2 digits if needed
