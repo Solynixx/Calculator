@@ -91,9 +91,26 @@ while True:
     # 🧮 SCIENTIFIC CALCULATOR MODE (COMING SOON)
     # =====================================
     elif start_choice == 2:
-        # calculator_scientific.menu_scientific()
-        # coming soon for calculator scientific
-        pass
+        while True:
+            CalculatorScientific.menu_scientific()
+            choice_sci = CalculatorScientific.scientific_prompt()
+
+            if choice_sci == 9:
+                print("Returning to main menu...\n")
+                break
+
+            sci = CalculatorScientific()
+            num_sci = sci.get_number_scientific(choice_sci)
+            result, op = sci.calculator_scientific(choice_sci, *num_sci)
+
+            if result is None:
+                continue
+
+            formatted = sci.format_result(num_sci, result, op)
+            print(formatted)
+
+            continue
+
 
     # =====================================
     # 💾 SAVE HISTORY TO FILES
