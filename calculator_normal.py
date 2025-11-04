@@ -158,7 +158,7 @@ class Calculator:
 
     # ===============================
     # 🧾 RESULT FORMATTING
-    # =============================== anomali
+    # =============================== 
     def format_result(self, numbers,result, op, order=None):
         """
         Format the calculation result with timestamp and operation details.
