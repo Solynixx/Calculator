@@ -1,166 +1,192 @@
-from calculator_normal import *
-from calculator_scientific import *
 import tkinter as tk
+from tkinter import ttk, messagebox
 from datetime import datetime
-
-# ===============================
-# 🧾 HISTORY STORAGE
-# ===============================
-history_normal = []
-history_scientific = []
-
-# ===============================
-# 🧾 HISTORY MANAGEMENT FUNCTIONS
-# ===============================
-def show_history(history_list, title):
-    print(f"\n===== {title} =====")
-    if not history_list:
-        print("No history available.\n")
-    else:
-        for order, entry in enumerate(history_list, start=1):
-            print(f"{order}. {entry.strip()}")
-    print()
-
-def save_history(history_list, filename):
-    if not history_list:
-        print("No history to save.\n")
-        return
-    with open(filename, "w", encoding="utf-8") as file:
-        for entry in history_list:
-            file.write(entry)
-    print(f"History saved successfully to '{filename}'\n")
-
-def clear_history(history_list):
-    history_list.clear()
-    print("History cleared successfully!\n")
-
-# ===============================
-# 🧮 MAIN PROGRAM ENTRY POINT
-# ===============================
-while True:
-    print("====== Welcome to the Calculator Program ======")
-    print("Select calculator mode")
-    print("1. Normal (Basic Operation)")
-    print("2. Scientific (Advanced Operation)")
-    print("3. Save history")
-    print("4. Show history Calculator normal")
-    print("5. Show history Calculator scientific")
-    print("6. Clear History")
-    print("7. Exit ")
-    print("="*48)
-
-    # Handle invalid menu input (non-integer)
-    try:
-        start_choice = int(input("Enter Number (1-7) = "))
-    except ValueError:
-        print("Please Enter in number")
-        continue
-
-    # =====================================
-    # 🧾 NORMAL CALCULATOR MODE
-    # =====================================
-    if start_choice == 1:
-        while True:
-            Calculator.menu_normal()  # Display normal calculator menu
-
-            choice_normal = Calculator.normal_prompt()  # Prompt the user for an operation choice
-
-            if choice_normal == 5:  # Option 5 allows returning to the main menu
-                print("Returning to main menu...\n")
-                break
-
-            cal_normal = Calculator()  # Create a new calculator instance
-
-            num_normal = cal_normal.get_number_normal()  # Collect user input for numbers
-
-            result, op = cal_normal.calculator_normal(choice_normal, num_normal)  # Perform the operation
-
-            # If an invalid operation occurred (e.g., divide by zero), skip iteration
-            if result is None:
-                continue
-
-            # Format and display the calculation result
-            result_normal = cal_normal.format_result(num_normal, result, op, None)
-            print(result_normal)
-
-            # ✅ Save to history automatically
-            history_normal.append(result_normal)
-
-            continue  # Allow user to perform more operations before returning
-
-    # =====================================
-    # 🧮 SCIENTIFIC CALCULATOR MODE (COMING SOON)
-    # =====================================
-    elif start_choice == 2:
-        while True:
-            CalculatorScientific.menu_scientific()
-            choice_sci = CalculatorScientific.scientific_prompt()
-
-            if choice_sci == 9:
-                print("Returning to main menu...\n")
-                break
-
-            sci = CalculatorScientific()
-            num_sci = sci.get_number_scientific(choice_sci)
-            result, op = sci.calculator_scientific(choice_sci, *num_sci)
-
-            if result is None:
-                continue
-
-            formatted = sci.format_result(num_sci, result, op)
-            print(formatted)
-
-            continue
+from calculator_normal import Calculator
+from calculator_scientific import CalculatorScientific
 
 
-    # =====================================
-    # 💾 SAVE HISTORY TO FILES
-    # =====================================
-    elif start_choice == 3:
-        save_history(history_normal, "history_normal.txt")
-        save_history(history_scientific, "history_scientific.txt")
+class CalculatorGUI:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Edbert's Calculator 🧮")
+        self.root.geometry("500x600")
+        self.root.configure(bg="#f5f5f5")
 
-    # =====================================
-    # 📜 SHOW NORMAL CALCULATOR HISTORY
-    # =====================================
-    elif start_choice == 4:
-        show_history(history_normal, "HISTORY - Normal Calculator")
+        # ========== Instances ==========
+        self.normal_calculator = Calculator()
+        self.scientific_calculator = CalculatorScientific()
+        self.history_normal = []
+        self.history_scientific = []
 
-    # =====================================
-    # 📜 SHOW SCIENTIFIC CALCULATOR HISTORY
-    # =====================================
-    elif start_choice == 5:
-        show_history(history_scientific, "HISTORY - Scientific Calculator")
+        # ========== Tabs ==========
+        self.notebook = ttk.Notebook(self.root)
+        self.frame_normal = ttk.Frame(self.notebook)
+        self.frame_scientific = ttk.Frame(self.notebook)
 
-    # =====================================
-    # 🧹 CLEAR HISTORY
-    # =====================================
-    elif start_choice == 6:
-        print("1. Clear normal calculator history")
-        print("2. Clear scientific calculator history")
-        print("3. Clear both")
-        clear_choice = input("Enter choice: ")
+        self.notebook.add(self.frame_normal, text="Normal")
+        self.notebook.add(self.frame_scientific, text="Scientific")
+        self.notebook.pack(expand=True, fill="both")
 
-        if clear_choice == "1":
-            clear_history(history_normal)
-        elif clear_choice == "2":
-            clear_history(history_scientific)
-        elif clear_choice == "3":
-            clear_history(history_normal)
-            clear_history(history_scientific)
+        # Setup UI for both tabs
+        self.setup_normal_tab()
+        self.setup_scientific_tab()
+
+    # ===========================
+    # NORMAL CALCULATOR TAB
+    # ===========================
+    def setup_normal_tab(self):
+        title = tk.Label(self.frame_normal, text="Normal Calculator", font=("Arial", 16, "bold"))
+        title.pack(pady=10)
+
+        # Entry
+        self.entry_normal = tk.Entry(self.frame_normal, width=40, font=("Arial", 13))
+        self.entry_normal.pack(pady=10)
+
+        # Buttons Frame
+        btn_frame = tk.Frame(self.frame_normal)
+        btn_frame.pack(pady=10)
+
+        buttons = [
+            ("Add (+)", 1),
+            ("Subtract (-)", 2),
+            ("Multiply (×)", 3),
+            ("Divide (÷)", 4)
+        ]
+
+        for i, (text, op) in enumerate(buttons):
+            tk.Button(
+                btn_frame, text=text, width=12, height=2, bg="#e0e0e0",
+                command=lambda c=op: self.calculate_normal(c)
+            ).grid(row=i // 2, column=i % 2, padx=5, pady=5)
+
+        # Result
+        self.result_label_normal = tk.Label(self.frame_normal, text="", font=("Arial", 12), fg="blue")
+        self.result_label_normal.pack(pady=10)
+
+        # History
+        tk.Label(self.frame_normal, text="History:", font=("Arial", 12, "bold")).pack()
+        self.text_history_normal = tk.Text(self.frame_normal, width=55, height=10, state="disabled", wrap="word")
+        self.text_history_normal.pack(pady=5)
+
+        # Clear Button
+        tk.Button(
+            self.frame_normal, text="Clear History", bg="#f0a0a0",
+            command=lambda: self.clear_history(self.text_history_normal, "normal")
+        ).pack(pady=5)
+
+    def calculate_normal(self, choice):
+        input_text = self.entry_normal.get().strip()
+        if not input_text:
+            messagebox.showwarning("Warning", "Please input numbers first!")
+            return
+        try:
+            numbers = [float(num) for num in input_text.split()]
+            result, op = self.normal_calculator.calculator_normal(choice, numbers)
+            if result is not None:
+                formatted = self.normal_calculator.format_result(numbers, result, op)
+                self.result_label_normal.config(text=formatted)
+                self.add_history(formatted, "normal")
+            else:
+                self.result_label_normal.config(text="Error in calculation.")
+        except ValueError:
+            self.result_label_normal.config(text="Invalid input! Use spaces between numbers.")
+
+    # ===========================
+    # SCIENTIFIC CALCULATOR TAB
+    # ===========================
+    def setup_scientific_tab(self):
+        title = tk.Label(self.frame_scientific, text="Scientific Calculator", font=("Arial", 16, "bold"))
+        title.pack(pady=10)
+
+        self.entry_sci = tk.Entry(self.frame_scientific, width=40, font=("Arial", 13))
+        self.entry_sci.pack(pady=10)
+
+        btn_frame = tk.Frame(self.frame_scientific)
+        btn_frame.pack(pady=10)
+
+        buttons = [
+            ("sin", 1), ("cos", 2), ("tan", 3),
+            ("sqrt", 4), ("pow", 5), ("log", 6),
+            ("log10", 7), ("factorial", 8)
+        ]
+
+        for i, (text, op) in enumerate(buttons):
+            tk.Button(
+                btn_frame, text=text, width=10, height=2, bg="#e0e0e0",
+                command=lambda c=op: self.calculate_sci(c)
+            ).grid(row=i // 4, column=i % 4, padx=5, pady=5)
+
+        # Result
+        self.result_label_sci = tk.Label(self.frame_scientific, text="", font=("Arial", 12), fg="blue")
+        self.result_label_sci.pack(pady=10)
+
+        # History
+        tk.Label(self.frame_scientific, text="History:", font=("Arial", 12, "bold")).pack()
+        self.text_history_sci = tk.Text(self.frame_scientific, width=55, height=10, state="disabled", wrap="word")
+        self.text_history_sci.pack(pady=5)
+
+        # Clear Button
+        tk.Button(
+            self.frame_scientific, text="Clear History", bg="#f0a0a0",
+            command=lambda: self.clear_history(self.text_history_sci, "scientific")
+        ).pack(pady=5)
+
+    def calculate_sci(self, choice):
+        input_text = self.entry_sci.get().strip()
+        if not input_text:
+            messagebox.showwarning("Warning", "Please input number(s) first!")
+            return
+        try:
+            if choice == 5:  # pow(x, y)
+                nums = [float(x) for x in input_text.split()]
+                if len(nums) != 2:
+                    self.result_label_sci.config(text="Need exactly 2 numbers for pow(x, y).")
+                    return
+            else:
+                nums = [float(input_text.split()[0])]
+
+            result, op = self.scientific_calculator.calculator_scientific(choice, *nums)
+            if result is not None:
+                formatted = self.scientific_calculator.format_result(nums, result, op)
+                self.result_label_sci.config(text=formatted)
+                self.add_history(formatted, "scientific")
+            else:
+                self.result_label_sci.config(text="Math domain error.")
+        except ValueError:
+            self.result_label_sci.config(text="Invalid input!")
+
+    # ===========================
+    # HISTORY MANAGEMENT
+    # ===========================
+    def add_history(self, text, mode):
+        if mode == "normal":
+            self.history_normal.append(text)
+            self.update_history_box(self.text_history_normal, self.history_normal)
+        elif mode == "scientific":
+            self.history_scientific.append(text)
+            self.update_history_box(self.text_history_sci, self.history_scientific)
+
+    def update_history_box(self, widget, history_list):
+        widget.config(state="normal")
+        widget.delete("1.0", tk.END)
+        for item in history_list[-10:]:  # show last 10
+            widget.insert(tk.END, item)
+        widget.config(state="disabled")
+
+    def clear_history(self, widget, mode):
+        widget.config(state="normal")
+        widget.delete("1.0", tk.END)
+        widget.config(state="disabled")
+        if mode == "normal":
+            self.history_normal.clear()
         else:
-            print("Invalid option.\n")
+            self.history_scientific.clear()
+        messagebox.showinfo("Success", "History cleared successfully!")
 
-    # =====================================
-    # 🚪 EXIT PROGRAM
-    # =====================================
-    elif start_choice == 7:
-        print("THANK YOU FOR USING MY PROGRAM")
-        break
-
-    # =====================================
-    # ⚠️ INVALID MENU CHOICE
-    # =====================================
-    else:
-        print("This feature is not implemented yet or invalid.\n")
-        continue
+# ===========================
+# MAIN EXECUTION
+# ===========================
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = CalculatorGUI(root)
+    root.mainloop()
