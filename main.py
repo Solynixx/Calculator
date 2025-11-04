@@ -12,13 +12,11 @@ class CalculatorGUI:
         self.root.geometry("500x600")
         self.root.configure(bg="#f5f5f5")
 
-        # ========== Instances ==========
         self.normal_calculator = Calculator()
         self.scientific_calculator = CalculatorScientific()
         self.history_normal = []
         self.history_scientific = []
 
-        # ========== Tabs ==========
         self.notebook = ttk.Notebook(self.root)
         self.frame_normal = ttk.Frame(self.notebook)
         self.frame_scientific = ttk.Frame(self.notebook)
@@ -27,13 +25,11 @@ class CalculatorGUI:
         self.notebook.add(self.frame_scientific, text="Scientific")
         self.notebook.pack(expand=True, fill="both")
 
-        # Setup UI for both tabs
+  
         self.setup_normal_tab()
         self.setup_scientific_tab()
 
-    # ===========================
-    # NORMAL CALCULATOR TAB
-    # ===========================
+
     def setup_normal_tab(self):
         title = tk.Label(self.frame_normal, text="Normal Calculator", font=("Arial", 16, "bold"))
         title.pack(pady=10)
@@ -42,7 +38,7 @@ class CalculatorGUI:
         self.entry_normal = tk.Entry(self.frame_normal, width=40, font=("Arial", 13))
         self.entry_normal.pack(pady=10)
 
-        # Buttons Frame
+
         btn_frame = tk.Frame(self.frame_normal)
         btn_frame.pack(pady=10)
 
@@ -59,16 +55,16 @@ class CalculatorGUI:
                 command=lambda c=op: self.calculate_normal(c)
             ).grid(row=i // 2, column=i % 2, padx=5, pady=5)
 
-        # Result
+ 
         self.result_label_normal = tk.Label(self.frame_normal, text="", font=("Arial", 12), fg="blue")
         self.result_label_normal.pack(pady=10)
 
-        # History
+  
         tk.Label(self.frame_normal, text="History:", font=("Arial", 12, "bold")).pack()
         self.text_history_normal = tk.Text(self.frame_normal, width=55, height=10, state="disabled", wrap="word")
         self.text_history_normal.pack(pady=5)
 
-        # Clear Button
+
         tk.Button(
             self.frame_normal, text="Clear History", bg="#f0a0a0",
             command=lambda: self.clear_history(self.text_history_normal, "normal")
@@ -91,9 +87,7 @@ class CalculatorGUI:
         except ValueError:
             self.result_label_normal.config(text="Invalid input! Use spaces between numbers.")
 
-    # ===========================
-    # SCIENTIFIC CALCULATOR TAB
-    # ===========================
+
     def setup_scientific_tab(self):
         title = tk.Label(self.frame_scientific, text="Scientific Calculator", font=("Arial", 16, "bold"))
         title.pack(pady=10)
@@ -116,16 +110,16 @@ class CalculatorGUI:
                 command=lambda c=op: self.calculate_sci(c)
             ).grid(row=i // 4, column=i % 4, padx=5, pady=5)
 
-        # Result
+
         self.result_label_sci = tk.Label(self.frame_scientific, text="", font=("Arial", 12), fg="blue")
         self.result_label_sci.pack(pady=10)
 
-        # History
+
         tk.Label(self.frame_scientific, text="History:", font=("Arial", 12, "bold")).pack()
         self.text_history_sci = tk.Text(self.frame_scientific, width=55, height=10, state="disabled", wrap="word")
         self.text_history_sci.pack(pady=5)
 
-        # Clear Button
+
         tk.Button(
             self.frame_scientific, text="Clear History", bg="#f0a0a0",
             command=lambda: self.clear_history(self.text_history_sci, "scientific")
@@ -137,7 +131,7 @@ class CalculatorGUI:
             messagebox.showwarning("Warning", "Please input number(s) first!")
             return
         try:
-            if choice == 5:  # pow(x, y)
+            if choice == 5:  
                 nums = [float(x) for x in input_text.split()]
                 if len(nums) != 2:
                     self.result_label_sci.config(text="Need exactly 2 numbers for pow(x, y).")
@@ -155,9 +149,7 @@ class CalculatorGUI:
         except ValueError:
             self.result_label_sci.config(text="Invalid input!")
 
-    # ===========================
-    # HISTORY MANAGEMENT
-    # ===========================
+
     def add_history(self, text, mode):
         if mode == "normal":
             self.history_normal.append(text)
@@ -169,7 +161,7 @@ class CalculatorGUI:
     def update_history_box(self, widget, history_list):
         widget.config(state="normal")
         widget.delete("1.0", tk.END)
-        for item in history_list[-10:]:  # show last 10
+        for item in history_list[-10:]: 
             widget.insert(tk.END, item)
         widget.config(state="disabled")
 
@@ -183,9 +175,7 @@ class CalculatorGUI:
             self.history_scientific.clear()
         messagebox.showinfo("Success", "History cleared successfully!")
 
-# ===========================
-# MAIN EXECUTION
-# ===========================
+
 if __name__ == "__main__":
     root = tk.Tk()
     app = CalculatorGUI(root)
