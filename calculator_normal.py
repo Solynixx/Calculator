@@ -1,22 +1,13 @@
 from datetime import datetime
-import math
 class Calculator:
-    """
-    A basic calculator class that supports fundamental arithmetic operations
-    (addition, subtraction, multiplication, and division).
-    It also handles user input, formatting, and validation.
-    """
 
-    """Initialize the Calculator instance."""
     def __init__(self):
         pass
 
     # ===============================
     # 📋 DISPLAY MENU
     # ===============================
-    """
-    Display the calculator's main operation menu for the user.
-    """
+
     @staticmethod
     def menu_normal():
         
@@ -34,21 +25,11 @@ class Calculator:
     # ➕ BASIC OPERATIONS
     # ===============================
     def add(self,*numbers):
-        """
-        Perform addition on all provided numbers.
-        Args:
-            *numbers (float): A list of numbers to add.
-        Returns:
-            tuple: (result, operator)
-        """
+
         result = sum(numbers) 
         op = " + "
         return result, op 
-                
-        """
-        Perform subtraction on all provided numbers.
-        The operation is performed sequentially from left to right.
-        """
+
     def subtract(self,*numbers):
         result = numbers[0]
         for num in numbers[1:] :
@@ -56,10 +37,7 @@ class Calculator:
         op = " - "
         return result , op
     
-        """
-        Perform multiplication on all provided numbers.
-        The operation is performed sequentially from left to right.
-        """
+
     def multiply(self,*numbers):
         result = numbers[0]
         for num in numbers [1:]:
@@ -67,10 +45,6 @@ class Calculator:
         op = " x "
         return result , op
 
-        """
-        Perform division on all provided numbers.
-        Handles division by zero with exception control.
-        """
     def divide(self, *numbers):
         try:
             result = numbers[0]
@@ -87,12 +61,7 @@ class Calculator:
     # ===============================
     # 🧭 USER PROMPT HANDLING
     # ===============================
-    """
-        Ask the user to choose an operation from the calculator menu.
 
-        Returns:
-            int: The user's menu choice (1-5).
-    """
     @staticmethod
     def normal_prompt():
         while True:
@@ -110,10 +79,7 @@ class Calculator:
     # ===============================
     # 🔢 USER NUMBER INPUT
     # ===============================
-    """
-        Collect numerical input from the user for performing operations.
-        Supports multiple values separated by spaces.
-    """
+
     def get_number_normal(self):
         while True:
             try :
@@ -133,16 +99,7 @@ class Calculator:
     # ===============================
     # ⚙️ CALCULATION HANDLER
     # ===============================
-    """
-        Execute the chosen arithmetic operation based on user input.
 
-        Args:
-            choice (int): The operation selected from the menu.
-            numbers (list): The list of numbers to operate on.
-
-        Returns:
-            tuple: (result, operator) if valid, otherwise (None, None).
-    """
     def calculator_normal(self, choice, numbers):
         if 1 <= choice <= 4 and numbers is not None:
             if choice == 1:
@@ -160,10 +117,7 @@ class Calculator:
     # 🧾 RESULT FORMATTING
     # =============================== 
     def format_result(self, numbers,result, op, order=None):
-        """
-        Format the calculation result with timestamp and operation details.
-        Integers are displayed without decimal points.
-        """
+
         specific_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         if result is None:
